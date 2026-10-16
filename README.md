@@ -23,4 +23,7 @@
 - NODE.JS
 - EXPRESS
 - MONGODB
-- TYPESCRIPT19721563
+- TYPESCRIPT
+
+### Notes
+1. The rule: a page should have only one <main>. It marks the main content of the whole page. Inside it, you use <section> to split that content into parts.
