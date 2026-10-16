@@ -27,3 +27,9 @@
 
 ### Notes
 1. The rule: a page should have only one <main>. It marks the main content of the whole page. Inside it, you use <section> to split that content into parts.
+
+2. Semantics Elements of HTML
+
+- Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
+
+- Examples of semantic elements: <img>, <table>, and <article> - Clearly defines its content.
