@@ -14,8 +14,10 @@
 
         <main>
             <section>
+                <!--TICKET FORM-->
                 <h2>New Ticket</h2>
                 <form>
+
                     <!--TITLE-->
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" placeholder="e.g. Printer not working">
@@ -32,6 +34,7 @@
                         <option value="high">High</option>
                     </select>
 
+                    <!--CATEGORY-->
                     <label for="category">Category</label>
                     <select id="category" name="category">
                         <option value="hardware">Hardware</option>
@@ -46,6 +49,29 @@
 
             <section>
                 <h2>Tickets</h2>
+                <article class="ticket-card">
+                    <h3>Printer Not Working</h3>
+                    <p>My printer is not printing my document from my Gmail.</p>
+                    <span class="badge priority-high">High</span>
+                    <span class="badge status-open">Open</span>
+                    <time datetime="2026-10-15">Oct 15, 2026</time>
+                </article>
+
+                <article class="ticket-card">
+                    <h3>Wi-Fi Not Working</h3>
+                    <p>My phone and laptop are not able to connect to the Wi-Fi.</p>
+                    <span class="badge priority-medium">Medium</span>
+                    <span class="badge status-in-progress">In Progress</span>
+                    <time datetime="2026-10-15">Oct 15, 2026</time>
+                </article>
+
+                <article class="ticket-card">
+                    <h3>Password not Working</h3>
+                    <p>My password is not working when I tried to log in.</p>
+                    <span class="badge priority-low">Low</span>
+                    <span class="badge status-closed">Closed</span>
+                    <time datetime="2026-10-14">Oct 14, 2026</time>
+                </article>
             </section>
 
         </main>
