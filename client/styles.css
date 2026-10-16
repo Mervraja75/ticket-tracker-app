@@ -11,6 +11,27 @@ header {
     padding: 10px 15px;
 }
 
+main {
+    display: flex; /* turns on Flexbox */
+    gap: 20px; /* space between items */
+    padding: 15px 40px;
+    align-items: flex-start; /* so the form doesn't stretch to the height of list */
+}
+
+.form-section {
+    flex: 1; /*take your share of the free space. */
+}
+
+form { /* made the details of form to be on top of each other neatly */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list-section {
+    flex: 2; /* the list needs more room */
+}
+
 .ticket-card {
     background-color: white;
     border: 1px solid #ddd;
@@ -22,3 +43,5 @@ header {
 footer {
     text-align: center;
 }
+
+
