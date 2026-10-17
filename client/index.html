@@ -19,30 +19,38 @@
                 <h2>New Ticket</h2>
                 <form>
 
-                    <!--TITLE-->
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" placeholder="e.g. Printer not working">
+                    <div class="form-group">
+                        <!--TITLE-->
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" placeholder="e.g. Printer not working">
+                    </div>
 
-                    <!--DESCRIPTION-->
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description"></textarea>
+                    <div class="form-group">
+                        <!--DESCRIPTION-->
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
 
-                    <!--PRIORITY-->
-                    <label for="priority">Priority</label>
-                    <select id="priority" name="priority">
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
+                    <div class="form-group">
+                        <!--PRIORITY-->
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
 
-                    <!--CATEGORY-->
-                    <label for="category">Category</label>
-                    <select id="category" name="category">
-                        <option value="hardware">Hardware</option>
-                        <option value="software">Software</option>
-                        <option value="network">Network</option>
-                        <option value="account">Account/Access</option>
-                    </select>
+                    <div class="form-group">
+                        <!--CATEGORY-->
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="hardware">Hardware</option>
+                            <option value="software">Software</option>
+                            <option value="network">Network</option>
+                            <option value="account">Account/Access</option>
+                        </select>
+                    </div>
 
                     <button type="submit">Submit Ticket</button>
                 </form>
