@@ -44,4 +44,49 @@ footer {
     text-align: center;
 }
 
+/* Status & Priority Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 6px;
+}
 
+.priority-high {
+    background-color: #fde2e1;
+    color: #b42318;
+}
+
+.priority-medium {
+    background-color: #fff897;
+    color: rgb(110, 81, 6);                  
+}
+
+.priority-low {
+    background-color: #a5fe40;
+    color: #3f6516;
+}
+
+.status-open {
+    background-color: #81ddff;
+    color: #1c4161;
+}
+
+.status-in-progress {
+    background-color: #ffd786;
+    color: #854501;
+}
+
+.status-closed {
+    background-color: lightgray;
+    color: #3c3d3e
+}
+
+.ticket-card time {
+    display: block;
+    margin-top: 12px;
+    font-size: 12px;
+    color: gray;
+}
