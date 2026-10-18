@@ -1,93 +1,94 @@
 <!DOCTYPE html> <!-- tells the browser this is a modern HTML page -->
 <html lang="en"> <!-- root of the page, sets the lang to ENGLISH -->
 
-    <head>
-        <meta charset="UTF-8"> <!-- supports all characters, incl. emojis -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- makes the page scale correctly on phones -->
-        <link rel="stylesheet" href="styles.css">
-        <title>Ticket Tracker App</title>
-    </head>
+<head>
+    <meta charset="UTF-8"> <!-- supports all characters, incl. emojis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- makes the page scale correctly on phones -->
+    <link rel="stylesheet" href="styles.css">
+    <title>Ticket Tracker App</title>
+</head>
 
-    <body>
-        <header>
-            <h1>Ticket Tracker</h1>
-        </header>
+<body>
+    <header>
+        <h1>Ticket Tracker</h1>
+    </header>
 
-        <main>
-            <section class="form-section">
-                <!--TICKET FORM-->
-                <h2>New Ticket</h2>
-                <form>
+    <main>
+        <section class="form-section">
+            <!--TICKET FORM-->
+            <h2>New Ticket</h2>
+            <form>
 
-                    <div class="form-group">
-                        <!--TITLE-->
-                        <label for="title">Title</label>
-                        <input type="text" id="title" name="title" placeholder="e.g. Printer not working">
-                    </div>
+                <div class="form-group">
+                    <!--TITLE-->
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="e.g. Printer not working">
+                </div>
 
-                    <div class="form-group">
-                        <!--DESCRIPTION-->
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description"></textarea>
-                    </div>
+                <div class="form-group">
+                    <!--DESCRIPTION-->
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
 
-                    <div class="form-group">
-                        <!--PRIORITY-->
-                        <label for="priority">Priority</label>
-                        <select id="priority" name="priority">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <!--PRIORITY-->
+                    <label for="priority">Priority</label>
+                    <select id="priority" name="priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <!--CATEGORY-->
-                        <label for="category">Category</label>
-                        <select id="category" name="category">
-                            <option value="hardware">Hardware</option>
-                            <option value="software">Software</option>
-                            <option value="network">Network</option>
-                            <option value="account">Account/Access</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <!--CATEGORY-->
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="hardware">Hardware</option>
+                        <option value="software">Software</option>
+                        <option value="network">Network</option>
+                        <option value="account">Account/Access</option>
+                    </select>
+                </div>
 
-                    <button type="submit">Submit Ticket</button>
-                </form>
-            </section>
+                <button type="submit">Submit Ticket</button>
+            </form>
+        </section>
 
-            <section class="list-section">
-                <h2>Tickets</h2>
-                <article class="ticket-card">
-                    <h3>Printer Not Working</h3>
-                    <p>My printer is not printing my document from my Gmail.</p>
-                    <span class="badge priority-high">High</span>
-                    <span class="badge status-open">Open</span>
-                    <time datetime="2026-10-15">Oct 15, 2026</time>
-                </article>
+        <section class="list-section">
+            <h2>Tickets</h2>
+            <article class="ticket-card">
+                <h3>Printer Not Working</h3>
+                <p>My printer is not printing my document from my Gmail.</p>
+                <span class="badge priority-high">High</span>
+                <span class="badge status-open">Open</span>
+                <time datetime="2026-10-15">Oct 15, 2026</time>
+            </article>
 
-                <article class="ticket-card">
-                    <h3>Wi-Fi Not Working</h3>
-                    <p>My phone and laptop are not able to connect to the Wi-Fi.</p>
-                    <span class="badge priority-medium">Medium</span>
-                    <span class="badge status-in-progress">In Progress</span>
-                    <time datetime="2026-10-15">Oct 15, 2026</time>
-                </article>
+            <article class="ticket-card">
+                <h3>Wi-Fi Not Working</h3>
+                <p>My phone and laptop are not able to connect to the Wi-Fi.</p>
+                <span class="badge priority-medium">Medium</span>
+                <span class="badge status-in-progress">In Progress</span>
+                <time datetime="2026-10-15">Oct 15, 2026</time>
+            </article>
 
-                <article class="ticket-card">
-                    <h3>Password not Working</h3>
-                    <p>My password is not working when I tried to log in.</p>
-                    <span class="badge priority-low">Low</span>
-                    <span class="badge status-closed">Closed</span>
-                    <time datetime="2026-10-14">Oct 14, 2026</time>
-                </article>
-            </section>
+            <article class="ticket-card">
+                <h3>Password not Working</h3>
+                <p>My password is not working when I tried to log in.</p>
+                <span class="badge priority-low">Low</span>
+                <span class="badge status-closed">Closed</span>
+                <time datetime="2026-10-14">Oct 14, 2026</time>
+            </article>
+        </section>
 
-        </main>
+    </main>
 
-        <footer>
-            <p>Built by Mervin Raja, 2026</p>
-        </footer>
-    </body>
+    <footer>
+        <p>Built by Mervin Raja, 2026</p>
+    </footer>
+</body>
 
 </html>
