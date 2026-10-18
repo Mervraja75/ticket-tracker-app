@@ -34,4 +34,3 @@
 
 - Examples of semantic elements: <img>, <table>, and <article> - Clearly defines its content.
 
-3. 

@@ -1,3 +1,7 @@
+*, *::before, *::after { /* prevents sizing bugs today */
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f6f8;
@@ -137,4 +141,33 @@ button:hover {
 input:focus, textarea:focus, select:focus {
     border-color: #003daf;
     outline: 2px solid #9db8ff;
+}
+
+/* FLEXBOX AXES
+   justify = ALONG the flex direction (main axis)
+   align   = ACROSS the flex direction (cross axis) */
+
+/* justify-content controls the main axis:
+   row    → left to right (horizontal)
+   column → top to bottom (vertical) */
+
+/* align-items controls the cross axis:
+   row    → controls height (vertical)
+   column → controls width (horizontal) */
+
+/* 
+1. RESPONSIVE DESIGN AT THE TOP & MEDIA QUERIES AT THE BOTTOM
+2. ACTIVATE: flex-direction: row/column
+3. CHOOSE: Flexbox Axes
+
+*/
+
+
+@media (max-width: 768px) {
+    /* rules here only apply when the screen is 768px wide or less */
+    main {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
 }
