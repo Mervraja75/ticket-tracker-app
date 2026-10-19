@@ -7,6 +7,12 @@
     <!-- makes the page scale correctly on phones -->
     <link rel="stylesheet" href="styles.css">
     <title>Ticket Tracker App</title>
+    <script src="app.js" defer></script>
+    <!--Why defer? The browser reads HTML from top to bottom. 
+    Without defer, the script would run before the page body exists, 
+    so it couldn’t find the form or cards. defer means “download now, 
+    but run it after the HTML has loaded.”-->
+
 </head>
 
 <body>
