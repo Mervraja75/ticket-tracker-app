@@ -61,6 +61,7 @@ footer {
     font-size: 12px;
     font-weight: bold;
     margin-right: 6px;
+    text-transform: capitalize;
 }
 
 .priority-high {
