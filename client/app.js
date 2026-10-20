@@ -1,4 +1,4 @@
-// PART 1
+// PART 1 (day 14)
 const tickets = [ // task 1
     { 
         id: 1, 
@@ -45,7 +45,7 @@ tickets.forEach(function (ticket) {
     console.log(ticket);
 })
 
-// PART 2
+// PART 2 (day 15)
 
 function renderTickets() {
     const list = document.querySelector("#ticket-list");
@@ -68,5 +68,29 @@ function renderTickets() {
 }
 
 renderTickets();
+
+// PART 3 (day 16) (Doorbell)
+
+const form = document.querySelector("form"); //find the form
+form.addEventListener("submit", function (event) { // listen for submit
+    event.preventDefault(); //stop the reload
+
+    // read the 4 values
+    const title = document.querySelector("#title").value;
+    const description = document.querySelector("#description").value;
+    const priority = document.querySelector("#priority").value;
+    const category = document.querySelector("#category").value;
+
+    //log them (Build an object from the values and log it)
+    const newTicket = {
+        title: title,
+        description: description,
+        priority: priority,
+        category: category,
+    };
+
+    console.log(newTicket);
+
+})
 
 
