@@ -1,4 +1,6 @@
-// PART 1 (day 14)
+// PART 1 (day 14) (Making a filing cabinet)
+// Each ticket is a folder, the array is the drawer, 
+// and forEach is a worker checking each folder one by one
 const tickets = [ // task 1
     { 
         id: 1, 
@@ -45,7 +47,10 @@ tickets.forEach(function (ticket) {
     console.log(ticket);
 })
 
-// PART 2 (day 15)
+// PART 2 (day 15) 
+// (Document Object Model - DOM)
+// Hanging a TV screen that shows what’s in the drawer. 
+// Add a folder, and it shows up on the screen
 
 function renderTickets() {
     const list = document.querySelector("#ticket-list");
@@ -56,12 +61,16 @@ function renderTickets() {
         card.className = "ticket-card";
 
         card.innerHTML = `
-            <h3>${ticket.title}</h3>
-            <p>${ticket.description}</p>
+            <h3></h3>
+            <p></p>
             <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
             <span class="badge status-${ticket.status}">${ticket.status}</span>
             <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
         `;
+
+        //PART 5 (DAY 17)
+        card.querySelector("h3").textContent = ticket.title;
+        card.querySelector("p").textContent = ticket.description;
 
         list.appendChild(card);
     })
@@ -70,6 +79,8 @@ function renderTickets() {
 renderTickets();
 
 // PART 3 (day 16) (Doorbell)
+// When someone rings it (clicks Submit), 
+// a worker comes and reads their form
 
 const form = document.querySelector("form"); //find the form
 form.addEventListener("submit", function (event) { // listen for submit
@@ -87,9 +98,22 @@ form.addEventListener("submit", function (event) { // listen for submit
         description: description,
         priority: priority,
         category: category,
+
+        //PART 5 (DAY 17) - Add a Ticket
+        // Step 1
+        id: Date.now(),
+        status: open,
+        createdAt: new Date().toISOString().slice(0, 10),
+
     };
 
+    // PART 3 (day 16) log it
     console.log(newTicket);
+
+     // PART 5 (DAY 17) 
+     // Step 2
+    tickets.push(newTicket);
+    renderTickets();
 
 })
 
