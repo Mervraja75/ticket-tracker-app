@@ -68,7 +68,11 @@ function renderTickets() {
             <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
         `;
 
-        //PART 5 (DAY 17)
+        //PART 5 (DAY 17) 
+        //connected to 
+        // card.innerHTML = `
+        // <h3></h3>
+        // <p></p>
         card.querySelector("h3").textContent = ticket.title;
         card.querySelector("p").textContent = ticket.description;
 
@@ -83,7 +87,7 @@ renderTickets();
 // a worker comes and reads their form
 
 const form = document.querySelector("form"); //find the form
-form.addEventListener("submit", function (event) { // listen for submit
+form.addEventListener("submit", function (event) { // Submit listener
     event.preventDefault(); //stop the reload
 
     // read the 4 values
@@ -91,8 +95,10 @@ form.addEventListener("submit", function (event) { // listen for submit
     const description = document.querySelector("#description").value;
     const priority = document.querySelector("#priority").value;
     const category = document.querySelector("#category").value;
+    
 
-    //log them (Build an object from the values and log it)
+    //PART 3 (DAY 16)
+    // log them (Build an object from the values and log it)
     const newTicket = {
         title: title,
         description: description,
@@ -102,7 +108,10 @@ form.addEventListener("submit", function (event) { // listen for submit
         //PART 5 (DAY 17) - Add a Ticket
         // Step 1
         id: Date.now(),
-        status: open,
+
+        //Without quotes, JS treats open as a variable name, not text.
+        // error without quotes : "function open() { [native code] }"
+        status: "open", 
         createdAt: new Date().toISOString().slice(0, 10),
 
     };
@@ -110,10 +119,24 @@ form.addEventListener("submit", function (event) { // listen for submit
     // PART 3 (day 16) log it
     console.log(newTicket);
 
+    //PART 6: DAY 18 (FORM VALIDATION)
+    // STEP 2
+    const errorMessage = document.querySelector("#form-error");
+    if (title.trim() === "" || description.trim() === "") {
+        errorMessage.textContent = "Please fill in the title and description.";
+        return;
+    }
+
+    // If the check passes, clear any old error
+    errorMessage.textContent = "";
+
      // PART 5 (DAY 17) 
      // Step 2
     tickets.push(newTicket);
     renderTickets();
+
+    //PART 6: DAY 18 (FORM VALIDATION)
+    form.reset();
 
 })
 
