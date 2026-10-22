@@ -144,6 +144,20 @@ input:focus, textarea:focus, select:focus {
     outline: 2px solid #9db8ff;
 }
 
+/* DELETE BUTTON */
+.delete-btn {
+    background-color: #fde2e1;
+    color: #b42318;
+    padding: 4px 10px;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.delete-btn:hover {
+    background-color: #b42318;
+    color: white;
+}
+
 /* FLEXBOX AXES
    justify = ALONG the flex direction (main axis)
    align   = ACROSS the flex direction (cross axis) */

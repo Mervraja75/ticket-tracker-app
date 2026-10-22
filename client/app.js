@@ -1,7 +1,14 @@
 // PART 1 (day 14) (Making a filing cabinet)
 // Each ticket is a folder, the array is the drawer, 
 // and forEach is a worker checking each folder one by one
-const tickets = [ // task 1
+
+// PART 8: (DAY 17) 
+// tickets is a const, and we can’t replace a const. 
+// changed const tickets to let tickets.
+// (push() worked with const because it changes the same array. 
+// filter() creates a new one, so we need let.
+
+let tickets = [ // task 1
     { 
         id: 1, 
         title: "Printer Not Working", 
@@ -55,6 +62,7 @@ tickets.forEach(function (ticket) {
 // Hanging a TV screen that shows what’s in the drawer. 
 // Add a folder, and it shows up on the screen
 
+//renderTickets() template
 function renderTickets() {
     const list = document.querySelector("#ticket-list");
     list.innerHTML = "";
@@ -75,6 +83,8 @@ function renderTickets() {
                 <option value="in-progress">In Progress</option>
                 <option value="closed">Closed</option>
             </select>
+
+            <button class="delete-btn" type="button">Delete</button>
         `;
 
         //PART 5 (DAY 17) 
@@ -85,13 +95,19 @@ function renderTickets() {
         card.querySelector("h3").textContent = ticket.title;
         card.querySelector("p").textContent = ticket.description;
 
-        //PART 7 (DAY 19) - Make the Dropdown work
-        const statusSelect = card.querySelector(".status-select");
-        statusSelect.value = ticket.status;
+        //PART 7 (DAY 19) - Make the Dropdown work (dropdown listener)
+        const statusSelect = card.querySelector(".status-select");//find the status to select
+        statusSelect.value = ticket.status; //dropdown for "change"
         statusSelect.addEventListener("change", function () {
-            updateStatus(ticket.id, statusSelect.value);
+            updateStatus(ticket.id, statusSelect.value); //inside listener, a function to update the status of the ticket
             //the id → get it from ticket 
             // the new status → get it from statusSelect 
+        });
+
+        //PART 8 (Day 20): Delete a Ticket (Make the button work)
+        const deleteBtn = card.querySelector(".delete-btn");//find the delete button in this card
+        deleteBtn.addEventListener("click", function () { //click to delete
+            deleteTicket(ticket.id); //inside listener, a function to delete the ticket
         });
 
         list.appendChild(card);
@@ -159,7 +175,7 @@ form.addEventListener("submit", function (event) { // Submit listener
 
 //PART 7 (DAY 19): updateStatus
 // add a status dropdown on each card 
-// you can move a ticket from Open → In Progress → Closed.
+// we can change a ticket from Open to In Progress to Closed.
 function updateStatus(id, newStatus) {
     const ticket = tickets.find(function (t) {
         return t.id === id;
@@ -167,6 +183,21 @@ function updateStatus(id, newStatus) {
     ticket.status = newStatus;
     renderTickets();
 }
+
+//PART 8: Day 20: Delete a Ticket
+function deleteTicket(id) {
+    tickets = tickets.filter(function (t) {
+        return t.id !== id;
+    });
+    renderTickets();
+
+    if (!confirm("Are you sure you want to DELETE this ticket?")) {
+        return;
+    }
+}
+
+
+
 
 
 
