@@ -32,8 +32,9 @@ const tickets = [ // task 1
         priority: "medium",
         status: "open",
         createdAt: "2026-10-19"},
-]
+];
 
+/*
 console.log(tickets[1].title); //task 2
 console.log(tickets.length);
 
@@ -41,11 +42,13 @@ console.log(tickets.length);
 ARRAY.forEach(function (ITEM) {
     console.log(ITEM);
 });
-*/
+
 
 tickets.forEach(function (ticket) {
     console.log(ticket);
-})
+});
+
+*/
 
 // PART 2 (day 15) 
 // (Document Object Model - DOM)
@@ -66,6 +69,12 @@ function renderTickets() {
             <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
             <span class="badge status-${ticket.status}">${ticket.status}</span>
             <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
+
+            <select class="status-select" aria-label="Change status">
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="closed">Closed</option>
+            </select>
         `;
 
         //PART 5 (DAY 17) 
@@ -76,6 +85,15 @@ function renderTickets() {
         card.querySelector("h3").textContent = ticket.title;
         card.querySelector("p").textContent = ticket.description;
 
+        //PART 7 (DAY 19) - Make the Dropdown work
+        const statusSelect = card.querySelector(".status-select");
+        statusSelect.value = ticket.status;
+        statusSelect.addEventListener("change", function () {
+            updateStatus(ticket.id, statusSelect.value);
+            //the id → get it from ticket 
+            // the new status → get it from statusSelect 
+        });
+
         list.appendChild(card);
     })
 }
@@ -85,7 +103,6 @@ renderTickets();
 // PART 3 (day 16) (Doorbell)
 // When someone rings it (clicks Submit), 
 // a worker comes and reads their form
-
 const form = document.querySelector("form"); //find the form
 form.addEventListener("submit", function (event) { // Submit listener
     event.preventDefault(); //stop the reload
@@ -138,6 +155,20 @@ form.addEventListener("submit", function (event) { // Submit listener
     //PART 6: DAY 18 (FORM VALIDATION)
     form.reset();
 
-})
+});
+
+//PART 7 (DAY 19): updateStatus
+// add a status dropdown on each card 
+// you can move a ticket from Open → In Progress → Closed.
+function updateStatus(id, newStatus) {
+    const ticket = tickets.find(function (t) {
+        return t.id === id;
+    });
+    ticket.status = newStatus;
+    renderTickets();
+}
+
+
+
 
 
