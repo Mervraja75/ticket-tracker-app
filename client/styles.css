@@ -47,6 +47,7 @@ form { /* made the details of form to be on top of each other neatly */
     padding: 15px 20px;
     margin-bottom: 16px; /* for space between cards*/
     border-radius: 8px;
+    position: relative; /* moving the date to the top right corner of the card */
 }
 
 footer {
@@ -96,9 +97,12 @@ footer {
 
 .ticket-card time {
     display: block;
-    margin-top: 12px;
+    /*margin-top: 12px; /* removing this part because moving the date to the top right corner of the card */
     font-size: 12px;
     color: gray;
+    position: absolute; /* moving the date to the top right corner of the card */
+    top: 16px; /* moving the date to the top right corner of the card */
+    right: 20px; /* moving the date to the top right corner of the card */
 }
 
 .form-group {
@@ -144,13 +148,24 @@ input:focus, textarea:focus, select:focus {
     outline: 2px solid #9db8ff;
 }
 
+/*STATUS SELECT*/
+.status-select {
+    background-color: #f3f3f3;
+    padding: 5px 12px;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
 /* DELETE BUTTON */
 .delete-btn {
     background-color: #fde2e1;
     color: #b42318;
-    padding: 4px 10px;
+    padding: 5px 12px;
     font-size: 12px;
     margin-left: 8px;
+    position: absolute; /* moving DELETE button to the bottom right corner */
+    bottom: 16px; /* moving DELETE button to the bottom right corner */
+    right: 20px; /* moving DELETE button to the bottom right corner */
 }
 
 .delete-btn:hover {
