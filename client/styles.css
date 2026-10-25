@@ -173,6 +173,16 @@ input:focus, textarea:focus, select:focus {
     color: white;
 }
 
+/* FILTER BAR */
+.filter-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+#search {
+    flex: 1; /*makes the search longer (takes the extra width)*/
+}
 /* FLEXBOX AXES
    justify = ALONG the flex direction (main axis)
    align   = ACROSS the flex direction (cross axis) */

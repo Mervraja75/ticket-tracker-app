@@ -67,8 +67,18 @@
             </form>
         </section>
 
+        <!--Ticket Section-->
         <section class="list-section">
             <h2>Tickets</h2>
+            <div class="filter-bar">
+                <input type="search" id="search" placeholder="Search by title..." aria-label="Search tickets">
+                <select id="status-filter" aria-label="Filter by status">
+                    <option value="all">All</option>
+                    <option value="open">Open</option>
+                    <option value="in-progress">In-Progress</option>
+                    <option value="closed">Closed</option>
+                </select>
+            </div>
             <div id="ticket-list"></div>
 
             <!-- 

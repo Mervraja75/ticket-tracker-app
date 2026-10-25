@@ -57,6 +57,7 @@ tickets.forEach(function (ticket) {
 
 */
 
+
 // PART 2 (day 15) 
 // (Document Object Model - DOM)
 // Hanging a TV screen that shows what’s in the drawer. 
@@ -67,7 +68,22 @@ function renderTickets() {
     const list = document.querySelector("#ticket-list");
     list.innerHTML = "";
 
-    tickets.forEach(function (ticket) {
+    //PART 9: (DAY 21) - Filter and Search
+    //Piece A : read what the user typed and picked
+    const searchText = document.querySelector("#search").value.toLowerCase();
+    const statusFilter = document.querySelector("#status-filter").value;
+
+    //PART 9: (DAY 21) - Filter and Search
+    //Piece B : filter the tickets
+    const visibleTickets = tickets.filter(function (t) {
+        const matchesStatus = statusFilter === "all" || t.status === statusFilter;
+        const matchesSearch = t.title.toLowerCase().includes(searchText);
+        return matchesStatus && matchesSearch;
+    });
+
+    //PART 9: (DAY 21) - Filter and Search
+    //Piece C : change the tickets.forEach to visibleTickets.forEach to change the loop
+    visibleTickets.forEach(function (ticket) {
         const card = document.createElement("article");
         card.className = "ticket-card";
 
@@ -88,7 +104,7 @@ function renderTickets() {
         `;
 
         //PART 5 (DAY 17) 
-        //connected to 
+        // connected to 
         // card.innerHTML = `
         // <h3></h3>
         // <p></p>
@@ -111,10 +127,12 @@ function renderTickets() {
         });
 
         list.appendChild(card);
-    })
+    });
 }
 
 renderTickets();
+
+
 
 // PART 3 (day 16) (Doorbell)
 // When someone rings it (clicks Submit), 
@@ -186,15 +204,40 @@ function updateStatus(id, newStatus) {
 
 //PART 8: Day 20: Delete a Ticket
 function deleteTicket(id) {
+
+    /*
     tickets = tickets.filter(function (t) {
         return t.id !== id;
     });
     renderTickets();
+    */
 
+    //1. ASK FIRST
     if (!confirm("Are you sure you want to DELETE this ticket?")) {
         return;
     }
+
+    //2. THEN DELETE
+    tickets = tickets.filter(function (t) {
+        return t.id !== id;
+    });
+
+    //3. THEN UPDATE THE SCREEN
+    renderTickets();
+
 }
+
+//PART 9: (DAY 21) - Filter and Search (Search Box Listener - Typing)
+const searchInput = document.querySelector("#search");
+searchInput.addEventListener("input", function () {
+    renderTickets();
+});
+
+//PART 9: (DAY 21) - Filter and Search (Status filter listener - Dropdown)
+const statusFilterSelect = document.querySelector("#status-filter");
+statusFilterSelect.addEventListener("change", function () {
+    renderTickets();
+});
 
 
 
