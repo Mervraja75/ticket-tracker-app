@@ -40,6 +40,14 @@ let tickets = [ // task 1
         status: "open",
         createdAt: "2026-10-19"},
 ];
+// PART 10: (DAY 22) - Save in the browser
+// Load when the page opens
+const saved = localStorage.getItem("tickets");
+
+if (saved !== null) {
+    tickets = JSON.parse(saved);
+}
+
 
 /*
 console.log(tickets[1].title); //task 2
@@ -183,7 +191,10 @@ form.addEventListener("submit", function (event) { // Submit listener
 
      // PART 5 (DAY 17) 
      // Step 2
-    tickets.push(newTicket);
+     // the submit listener
+    tickets.push(newTicket); 
+    //
+    saveTickets(); //Save after every change - 2
     renderTickets();
 
     //PART 6: DAY 18 (FORM VALIDATION)
@@ -198,7 +209,9 @@ function updateStatus(id, newStatus) {
     const ticket = tickets.find(function (t) {
         return t.id === id;
     });
+    //updateStatus
     ticket.status = newStatus;
+    saveTickets(); //Save after every change - 2
     renderTickets();
 }
 
@@ -222,9 +235,17 @@ function deleteTicket(id) {
         return t.id !== id;
     });
 
+    //Save after every change - 3
+    saveTickets();
+
     //3. THEN UPDATE THE SCREEN
     renderTickets();
 
+}
+
+//PART 10: (DAY 22) - Save in the browser
+function saveTickets() {
+    localStorage.setItem("tickets", JSON.stringify(tickets)); //convert array(tickets) to text
 }
 
 //PART 9: (DAY 21) - Filter and Search (Search Box Listener - Typing)
