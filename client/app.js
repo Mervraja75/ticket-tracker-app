@@ -104,7 +104,7 @@ function getVisibleTickets () {
 }
 
 // Brings the visible tickets to the page
-function renderTickets() {
+function renderTickets() { // READ (CRUD)
     const list = document.querySelector("#ticket-list");
     list.innerHTML = "";
    
@@ -117,7 +117,7 @@ function renderTickets() {
 }
 
 // change the status of a ticket, save and render next ticket
-function updateStatus(id, newStatus) {
+function updateStatus(id, newStatus) { // UPDATE (CRUD)
     const ticket = tickets.find(function (t) {
         return t.id === id;
     });
@@ -128,7 +128,7 @@ function updateStatus(id, newStatus) {
 }
 
 //Delete a ticket after receiving confirmation from user
-function deleteTicket(id) {
+function deleteTicket(id) { // DELETE (CRUD)
 
     //1. ASK FIRST
     if (!confirm("Are you sure you want to DELETE this ticket?")) {
@@ -194,7 +194,7 @@ form.addEventListener("submit", function (event) { // Submit listener
 
     // the submit listener
     // Add, save, render Tickets, and clear the form
-    tickets.push(newTicket); 
+    tickets.push(newTicket); // CREATE (CRUD)
     //
     saveTickets(); 
     renderTickets();
@@ -220,7 +220,7 @@ statusFilterSelect.addEventListener("change", function () {
 // 4.          START 
 // =============================== 
 
-renderTickets();
+renderTickets(); // READ (CRUD)
 
 
 
