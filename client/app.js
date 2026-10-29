@@ -2,9 +2,8 @@
 // 1.           DATA  
 // ===============================          
 
-// DAY 14 - Arrays & Objects
-// SAMPLE TICKETS ARRAY
-let tickets = [ // task 1
+// Sample Tickets (used first time when the app opens)
+let tickets = [ 
     { 
         id: 1, 
         title: "Printer Not Working", 
@@ -37,8 +36,7 @@ let tickets = [ // task 1
         createdAt: "2026-10-19"},
 ];
 
-// DAY 22 - Save in the browser
-// Load when the page opens 
+// Load saved tickets from the browser, if there are any
 const saved = localStorage.getItem("tickets");
 if (saved !== null) {
     tickets = JSON.parse(saved);
@@ -48,86 +46,88 @@ if (saved !== null) {
 // 2.        FUNCTIONS  
 // ===============================    
 
-// DAY 15 - THE DOCUMENTED OBJECT MODEL
-//renderTickets() template
-function renderTickets() {
-    const list = document.querySelector("#ticket-list");
-    list.innerHTML = "";
+// Build one ticket card element
+function createTicketCard (ticket) { 
 
-    //DAY 21 - Filter and Search
-    //Piece A : read what the user typed and picked
+    
+    const card = document.createElement("article");
+    card.className = "ticket-card";
+
+    card.innerHTML = `
+        <h3></h3>
+        <p></p>
+        <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
+        <span class="badge status-${ticket.status}">${ticket.status}</span>
+        <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
+
+        <select class="status-select" aria-label="Change status">
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="closed">Closed</option>
+        </select>
+
+        <button class="delete-btn" type="button">Delete</button>
+    `;
+
+    // Use textContent for texts that are typed by users, no HTML run
+    card.querySelector("h3").textContent = ticket.title;
+    card.querySelector("p").textContent = ticket.description;
+
+    // Status dropdown -> show current status, update on change
+    const statusSelect = card.querySelector(".status-select");//find the status to select
+    statusSelect.value = ticket.status; //dropdown for "change"
+    statusSelect.addEventListener("change", function () {
+        updateStatus(ticket.id, statusSelect.value); //inside listener, a function to update the status of the ticket
+    });
+
+    // Delete ticket button
+    const deleteBtn = card.querySelector(".delete-btn");//find the delete button in this card
+    deleteBtn.addEventListener("click", function () { //click to delete
+        deleteTicket(ticket.id); //inside listener, a function to delete the ticket
+    });
+    return card; 
+}
+
+// returns the tickets that matches the search and status filter
+function getVisibleTickets () {
+
+    // Read the search text and selected status
     const searchText = document.querySelector("#search").value.toLowerCase();
     const statusFilter = document.querySelector("#status-filter").value;
-
-    //DAY 21 - Filter and Search
-    //Piece B : filter the tickets
     const visibleTickets = tickets.filter(function (t) {
         const matchesStatus = statusFilter === "all" || t.status === statusFilter;
         const matchesSearch = t.title.toLowerCase().includes(searchText);
         return matchesStatus && matchesSearch;
     });
 
-    //DAY 21 - Filter and Search
-    //Piece C : change the tickets.forEach to visibleTickets.forEach to change the loop
+    return visibleTickets;
+}
+
+// Brings the visible tickets to the page
+function renderTickets() {
+    const list = document.querySelector("#ticket-list");
+    list.innerHTML = "";
+   
+    const visibleTickets = getVisibleTickets();
+
     visibleTickets.forEach(function (ticket) {
-        const card = document.createElement("article");
-        card.className = "ticket-card";
-
-        card.innerHTML = `
-            <h3></h3>
-            <p></p>
-            <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
-            <span class="badge status-${ticket.status}">${ticket.status}</span>
-            <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
-
-            <select class="status-select" aria-label="Change status">
-                <option value="open">Open</option>
-                <option value="in-progress">In Progress</option>
-                <option value="closed">Closed</option>
-            </select>
-
-            <button class="delete-btn" type="button">Delete</button>
-        `;
-
-        // DAY 17 connected to card.innerHTML = `
-        // <h3></h3>
-        // <p></p>
-        card.querySelector("h3").textContent = ticket.title;
-        card.querySelector("p").textContent = ticket.description;
-
-        //DAY 19 - Make the Dropdown work (dropdown listener)
-        const statusSelect = card.querySelector(".status-select");//find the status to select
-        statusSelect.value = ticket.status; //dropdown for "change"
-        statusSelect.addEventListener("change", function () {
-            updateStatus(ticket.id, statusSelect.value); //inside listener, a function to update the status of the ticket
-            //the id → get it from ticket 
-            // the new status → get it from statusSelect 
-        });
-
-        //Day 20 - Delete a Ticket (Make the button work)
-        const deleteBtn = card.querySelector(".delete-btn");//find the delete button in this card
-        deleteBtn.addEventListener("click", function () { //click to delete
-            deleteTicket(ticket.id); //inside listener, a function to delete the ticket
-        });
-
+        const card = createTicketCard(ticket);
         list.appendChild(card);
     });
 }
 
-// DAY 19 - updateStatus
-// add a status dropdown on each card 
-// we can change a ticket from Open to In Progress to Closed.
+// change the status of a ticket, save and render next ticket
 function updateStatus(id, newStatus) {
     const ticket = tickets.find(function (t) {
         return t.id === id;
     });
     //updateStatus
     ticket.status = newStatus;
-    saveTickets(); //Save after every change - 1
+    saveTickets(); 
     renderTickets();
 }
 
-//Day 20 - Delete a Ticket
+//Delete a ticket after receiving confirmation from user
 function deleteTicket(id) {
 
     //1. ASK FIRST
@@ -140,15 +140,13 @@ function deleteTicket(id) {
         return t.id !== id;
     });
 
-    //Save after every change - 2
-    saveTickets();
-
     //3. THEN UPDATE THE SCREEN
+    saveTickets();
     renderTickets();
 
 }
 
-//DAY 22 - Save in the browser
+//Save tickets history to the browser (localStorage only stores text)
 function saveTickets() {
     localStorage.setItem("tickets", JSON.stringify(tickets)); //convert array(tickets) to text
 }
@@ -157,7 +155,7 @@ function saveTickets() {
 // 3.     EVENT LISTENERS  
 // =============================== 
 
-// Day 16 - Handling the form
+// New Ticket Form
 const form = document.querySelector("form"); //find the form
 form.addEventListener("submit", function (event) { // Submit listener
     event.preventDefault(); //stop the reload
@@ -167,59 +165,52 @@ form.addEventListener("submit", function (event) { // Submit listener
     const description = document.querySelector("#description").value;
     const priority = document.querySelector("#priority").value;
     const category = document.querySelector("#category").value;
+
+    // Stop if the title or description is empty
+    const errorMessage = document.querySelector("#form-error");
+    if (title.trim() === "" || description.trim() === "") {
+        errorMessage.textContent = "Please fill in the title and description.";
+        return;
+    }
+    // If the check passes, clear any old error
+    errorMessage.textContent = "";
     
 
-    // DAY 16
-    // log them (Build an object from the values and log it)
+    // Build the new ticket
     const newTicket = {
         title: title,
         description: description,
         priority: priority,
         category: category,
 
-        // DAY 17 - Add a Ticket
-        // Step 1
+        
         id: Date.now(),
 
-        // Without quotes, JS treats open as a variable name, not text.
-        // error without quotes : "function open() { [native code] }"
+        // "open" in quotes = text (without quotes, it's the browser's open() function)
         status: "open", 
         createdAt: new Date().toISOString().slice(0, 10),
 
     };
 
-    // DAY 18 (FORM VALIDATION)
-    // STEP 2
-    const errorMessage = document.querySelector("#form-error");
-    if (title.trim() === "" || description.trim() === "") {
-        errorMessage.textContent = "Please fill in the title and description.";
-        return;
-    }
-
-    // If the check passes, clear any old error
-    errorMessage.textContent = "";
-
-     // DAY 17
-     // Step 2
-     // the submit listener
+    // the submit listener
+    // Add, save, render Tickets, and clear the form
     tickets.push(newTicket); 
     //
-    saveTickets(); //Save after every change - 2
+    saveTickets(); 
     renderTickets();
 
-    //DAY 18 (FORM VALIDATION)
     form.reset();
 
 });
 
 
-//DAY 21 - Filter and Search (Search Box Listener - Typing)
+//Render the list of tickets while typing in the search box
 const searchInput = document.querySelector("#search");
 searchInput.addEventListener("input", function () {
     renderTickets();
 });
 
-//DAY 21 - Filter and Search (Status filter listener - Dropdown)
+//Render the list of tickets when the status filter changes
 const statusFilterSelect = document.querySelector("#status-filter");
 statusFilterSelect.addEventListener("change", function () {
     renderTickets();
