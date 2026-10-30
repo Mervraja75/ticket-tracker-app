@@ -1,15 +1,11 @@
-console.log("Hello from the server");
+const express = require("express") // bring in Express
+const app = express(); // create the app. "app" is the server
+const PORT = 3000; // the server "app" will listen to the port 3000
 
-const tickets = [
-    { id: 1, title: "Printer not working", status: "open"},
-]
-
-tickets.forEach(function (ticket) {
-    console.log(ticket.title)
+app.get("/", function (req, res) {
+    res.send("API is running");
 })
 
-const openTickets = tickets.filter(function (t) {
-    return t.status === "open";
+app.listen(PORT, function () {
+    console.log(`Server running on http://localhost:${PORT}`);
 })
-
-console.log("Open Tickets", openTickets.length);
