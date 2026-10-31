@@ -39,7 +39,7 @@ let tickets = [
 // Load saved tickets from the browser, if there are any
 const saved = localStorage.getItem("tickets");
 if (saved !== null) {
-    tickets = JSON.parse(saved);
+    tickets = JSON.parse(saved); 
 }
 
 // ===============================
