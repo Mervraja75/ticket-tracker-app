@@ -1,10 +1,13 @@
 ###
+### Health check (should say "API is running")
 GET http://localhost:3000
 
 ###
+### Get all tickets
 GET http://localhost:3000/api/tickets
 
 ###
+### Create a ticket (should be 201)
 POST http://localhost:3000/api/tickets
 Content-Type: application/json
 
@@ -14,3 +17,34 @@ Content-Type: application/json
     "priority": "low",
     "category": "hardware"
 }
+
+###
+### Get one ticket
+GET http://localhost:3000/api/tickets/1
+
+###
+### Get one ticket that doesn't exist (should be 404)
+GET http://localhost:3000/api/tickets/99
+
+###
+### Update a ticket's status
+PATCH http://localhost:3000/api/tickets/1
+Content-Type: application/json
+
+{
+    "status": "closed"
+}
+
+### Update a ticket that doesn't exist (should be 404)
+PATCH http://localhost:3000/api/tickets/99
+Content-Type: application/json
+
+{
+    "status": "closed"
+}
+
+###
+DELETE http://localhost:3000/api/tickets/3
+
+### Delete a ticket that doesn't exist (should be 404)
+DELETE http://localhost:3000/api/tickets/99

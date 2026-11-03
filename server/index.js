@@ -45,6 +45,7 @@ app.get("/api/tickets", function (req, res) {
     res.json(tickets)
 })
 
+//POST route
 app.post("/api/tickets", function (req, res) {
     const newTicket = {
         id: Date.now(),
@@ -59,6 +60,47 @@ app.post("/api/tickets", function (req, res) {
     res.status(201).json(newTicket);
 
 });
+
+//Route 1: GET one ticket
+app.get("/api/tickets/:id", function(req, res) {
+    const id = Number(req.params.id);
+    const ticket = tickets.find(function (t) {
+        return t.id === id;
+    })
+    if (!ticket){
+        return res.status(404).json({ error: "Ticket not found" });
+    }
+        res.json(ticket);
+    
+});
+
+//Route 2: PATCH (update a ticket)
+app.patch("/api/tickets/:id", function(req, res) {
+    const id = Number(req.params.id);
+    const ticket = tickets.find(function (t) {
+        return t.id === id;
+    });
+    if (!ticket){
+        return res.status(404).json({ error: "Ticket not found" });
+    }
+    ticket.status = req.body.status;
+    res.json(ticket);
+});
+
+//Route 3: DELETE (remove ticket)
+app.delete("/api/tickets/:id", function(req, res) {
+    const id = Number(req.params.id);
+    const ticket = tickets.find(function (t) {
+        return t.id === id;
+    });
+    if (!ticket){
+        return res.status(404).json({ error: "Ticket not found" });
+    }
+    tickets = tickets.filter(function (t) {
+    return t.id !== id;
+    });
+    res.json({message: "Ticket deleted" });
+})
 
 app.listen(PORT, function () {
     console.log(`Server running on http://localhost:${PORT}`);
