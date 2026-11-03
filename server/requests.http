@@ -1,2 +1,16 @@
 ###
 GET http://localhost:3000
+
+###
+GET http://localhost:3000/api/tickets
+
+###
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+
+{
+    "title": "Mouse not working",
+    "description": "My mouse stopped clicking",
+    "priority": "low",
+    "category": "hardware"
+}

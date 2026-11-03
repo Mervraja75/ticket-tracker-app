@@ -1,5 +1,6 @@
 const express = require("express") // bring in Express
 const app = express(); // create the app. "app" is the server
+app.use(express.json()); //middleware : code that runs on every request before the routes
 const PORT = 3000; // the server "app" will listen to the port 3000
 
 // Sample Tickets (used first time when the app opens)
@@ -43,6 +44,21 @@ app.get("/", function (req, res) {
 app.get("/api/tickets", function (req, res) {
     res.json(tickets)
 })
+
+app.post("/api/tickets", function (req, res) {
+    const newTicket = {
+        id: Date.now(),
+        title: req.body.title,
+        description: req.body.description,
+        priority: req.body.priority,
+        category: req.body.category,
+        status: "open",
+        createdAt: new Date().toISOString().slice(0, 10),
+    };
+    tickets.push(newTicket);
+    res.status(201).json(newTicket);
+
+});
 
 app.listen(PORT, function () {
     console.log(`Server running on http://localhost:${PORT}`);
