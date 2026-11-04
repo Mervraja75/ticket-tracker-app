@@ -1,13 +1,13 @@
 ###
-### Health check (should say "API is running")
+### Health check (should say "API is running") (200)
 GET http://localhost:3000
 
 ###
-### Get all tickets
+### Get all tickets (200)
 GET http://localhost:3000/api/tickets
 
 ###
-### Create a ticket (should be 201)
+### Create a ticket (201)
 POST http://localhost:3000/api/tickets
 Content-Type: application/json
 
@@ -19,15 +19,15 @@ Content-Type: application/json
 }
 
 ###
-### Get one ticket
+### Get one ticket (200)
 GET http://localhost:3000/api/tickets/1
 
 ###
-### Get one ticket that doesn't exist (should be 404)
+### Get one ticket that doesn't exist (404)
 GET http://localhost:3000/api/tickets/99
 
 ###
-### Update a ticket's status
+### Update a ticket's status (200)
 PATCH http://localhost:3000/api/tickets/1
 Content-Type: application/json
 
@@ -35,7 +35,7 @@ Content-Type: application/json
     "status": "closed"
 }
 
-### Update a ticket that doesn't exist (should be 404)
+### Update a ticket that doesn't exist (404)
 PATCH http://localhost:3000/api/tickets/99
 Content-Type: application/json
 
@@ -43,8 +43,39 @@ Content-Type: application/json
     "status": "closed"
 }
 
-###
+### Delete a ticket (200)
 DELETE http://localhost:3000/api/tickets/3
 
-### Delete a ticket that doesn't exist (should be 404)
+### Delete a ticket that doesn't exist (404)
 DELETE http://localhost:3000/api/tickets/99
+
+######################################################################
+
+### Create a ticket with no title (400)
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+
+{
+    "description": "No title here",
+    "priority": "low",
+    "category": "hardware"
+}
+
+### Create a ticket with only spaces as the title (400)
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+
+{
+    "title": "  ",
+    "description": "Spaces only",
+    "priority": "low",
+    "category": "hardware"
+}
+
+### Update with an invalid status (400)
+PATCH http://localhost:3000/api/tickets/1
+Content-Type: application/json
+
+{
+    "status": "banana"
+}
