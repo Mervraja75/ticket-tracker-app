@@ -1,46 +1,20 @@
 // ===============================
 // 1.           DATA  
-// ===============================          
+// ===============================    
+
+const API_URL = "http://localhost:3000/api/tickets";
 
 // Sample Tickets (used first time when the app opens)
-let tickets = [ 
-    { 
-        id: 1, 
-        title: "Printer Not Working", 
-        description: "My printer is not printing my document from my Gmail.", 
-        priority: "high", 
-        status: "open", 
-        createdAt: "2026-10-15"},
-
-    { 
-        id: 2, 
-        title: "Wi-Fi Not Working", 
-        description: "My phone and laptop are not able to connect to the Wi-Fi.", 
-        priority: "medium", 
-        status: "in-progress", 
-        createdAt: "2026-10-15"},
-
-    { 
-        id: 3, 
-        title: "Password not Working", 
-        description: "My password is not working when I tried to log in.", 
-        priority: "low", 
-        status: "closed", 
-        createdAt: "2026-10-14"},
-    {
-        id: 4, 
-        title: "Monitor not turning on",
-        description: "My monitor is not turning on when I plug in.",
-        priority: "medium",
-        status: "open",
-        createdAt: "2026-10-19"},
-];
+let tickets = []
 
 // Load saved tickets from the browser, if there are any
+// No longer need localStorage because the tickets are live on the server
+/*
 const saved = localStorage.getItem("tickets");
 if (saved !== null) {
     tickets = JSON.parse(saved); 
 }
+*/
 
 // ===============================
 // 2.        FUNCTIONS  
@@ -151,6 +125,13 @@ function saveTickets() {
     localStorage.setItem("tickets", JSON.stringify(tickets)); //convert array(tickets) to text
 }
 
+//Function to ask the server
+async function loadTickets() {
+    const response = await fetch(API_URL);
+    tickets = await response .json();
+    renderTickets;
+}
+
 // ===============================
 // 3.     EVENT LISTENERS  
 // =============================== 
@@ -220,7 +201,9 @@ statusFilterSelect.addEventListener("change", function () {
 // 4.          START 
 // =============================== 
 
-renderTickets(); // READ (CRUD)
+//renderTickets(); // READ (CRUD)
+
+loadTickets();
 
 
 
