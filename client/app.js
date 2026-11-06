@@ -7,15 +7,6 @@ const API_URL = "http://localhost:3000/api/tickets";
 // Sample Tickets (used first time when the app opens)
 let tickets = []
 
-// Load saved tickets from the browser, if there are any
-// No longer need localStorage because the tickets are live on the server
-/*
-const saved = localStorage.getItem("tickets");
-if (saved !== null) {
-    tickets = JSON.parse(saved); 
-}
-*/
-
 // ===============================
 // 2.        FUNCTIONS  
 // ===============================    
@@ -90,46 +81,40 @@ function renderTickets() { // READ (CRUD)
     });
 }
 
-// change the status of a ticket, save and render next ticket
-function updateStatus(id, newStatus) { // UPDATE (CRUD)
-    const ticket = tickets.find(function (t) {
-        return t.id === id;
+// Change a ticket's status on the server, then show the fresh list
+async function updateStatus(id, newStatus) { // UPDATE (CRUD) // async = this function can wait
+    await fetch(`${API_URL}/${id}`, { // the address of ONE ticket, e.g. .../api/tickets/5
+        method: "PATCH", // PATCH = change part of something
+        headers: { "Content-Type": "application/json" }, // tell the server: this is JSON
+        body: JSON.stringify({ status: newStatus }), // send only the new status
     });
-    //updateStatus
-    ticket.status = newStatus;
-    saveTickets(); 
-    renderTickets();
+
+    await loadTickets(); // get the fresh list and show it
 }
 
-//Delete a ticket after receiving confirmation from user
-function deleteTicket(id) { // DELETE (CRUD)
+//Delete a ticket on the server after receiving confirmation from user
+async function deleteTicket(id) { // DELETE (CRUD)
 
     //1. ASK FIRST
     if (!confirm("Are you sure you want to DELETE this ticket?")) {
         return;
     }
 
-    //2. THEN DELETE
-    tickets = tickets.filter(function (t) {
-        return t.id !== id;
+    //2. TELL THE SERVER TO DELETE IT
+    await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
     });
 
-    //3. THEN UPDATE THE SCREEN
-    saveTickets();
-    renderTickets();
+    //3. GET THE FRESH LISH AND SHOW IT
+    await loadTickets();
 
-}
-
-//Save tickets history to the browser (localStorage only stores text)
-function saveTickets() {
-    localStorage.setItem("tickets", JSON.stringify(tickets)); //convert array(tickets) to text
 }
 
 //Function to ask the server
 async function loadTickets() {
-    const response = await fetch(API_URL);
-    tickets = await response .json();
-    renderTickets;
+    const response = await fetch(API_URL);  // ask the server for tickets, and wait
+    tickets = await response .json(); // open the answer and turn it into a list
+    renderTickets(); // show the tickets on the screen
 }
 
 // ===============================
@@ -138,7 +123,7 @@ async function loadTickets() {
 
 // New Ticket Form
 const form = document.querySelector("form"); //find the form
-form.addEventListener("submit", function (event) { // Submit listener
+form.addEventListener("submit", async function (event) { // Submit listener (async = this function can wait)
     event.preventDefault(); //stop the reload
 
     // read the 4 values
@@ -164,21 +149,17 @@ form.addEventListener("submit", function (event) { // Submit listener
         priority: priority,
         category: category,
 
-        
-        id: Date.now(),
-
-        // "open" in quotes = text (without quotes, it's the browser's open() function)
-        status: "open", 
-        createdAt: new Date().toISOString().slice(0, 10),
-
     };
 
-    // the submit listener
-    // Add, save, render Tickets, and clear the form
-    tickets.push(newTicket); // CREATE (CRUD)
-    //
-    saveTickets(); 
-    renderTickets();
+    //send the new ticket to the server and wait
+    await fetch(API_URL, {
+        method: "POST", // POST = create something new
+        headers: { "Content-Type": "application/json" }, // tell the server: this is JSON
+        body: JSON.stringify(newTicket), // pack the ticket into text
+    });
+
+    // Get the fresh list from the server and show it
+    await loadTickets();
 
     form.reset();
 
@@ -201,7 +182,6 @@ statusFilterSelect.addEventListener("change", function () {
 // 4.          START 
 // =============================== 
 
-//renderTickets(); // READ (CRUD)
 
 loadTickets();
 

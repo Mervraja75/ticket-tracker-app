@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ### Delete a ticket (200)
-DELETE http://localhost:3000/api/tickets/3
+DELETE http://localhost:3000/api/tickets/1793948742284
 
 ### Delete a ticket that doesn't exist (404)
 DELETE http://localhost:3000/api/tickets/99
