@@ -1,5 +1,6 @@
 const express = require ("express");
 const router = express.Router();
+const Ticket = require("../models/Ticket"); // the Ticket assistant (from models/Ticket.js)
 
 // Sample Tickets (used first time when the app opens)
 let tickets = [ 
@@ -35,10 +36,11 @@ let tickets = [
         createdAt: "2026-10-19"},
 ];
 
-//GET ALL ROUTE
-router.get("/", function (req, res) {
-    res.json(tickets)
-})
+//GET ALL ROUTE from the DATABASE
+router.get("/", async function (req, res) {
+    const allTickets = await Ticket.find();
+    res.json(allTickets);
+});
 
 // GET ONE ROUTE
 router.get("/:id", function(req, res) {
@@ -54,24 +56,26 @@ router.get("/:id", function(req, res) {
 });
 
 //POST ROUTE
-router.post("/", function (req, res) {
+router.post("/", async function (req, res) {
     //Validate POST
     const title = req.body.title;
     const description = req.body.description;
     if (!title || title.trim() === "" || !description || description.trim() === "" ) {
         return res.status(400).json({ error: "Title and description are required"});
     }
-    const newTicket = {
-        id: Date.now(),
-        title: req.body.title,
-        description: req.body.description,
-        priority: req.body.priority,
-        category: req.body.category,
-        status: "open",
-        createdAt: new Date().toISOString().slice(0, 10),
-    };
-    tickets.push(newTicket);
-    res.status(201).json(newTicket);
+
+    try {
+        const newTicket = await Ticket.create({
+            title: title,
+            description: description,
+            priority: req.body.priority,
+            category: req.body.category,
+        });
+
+        res.status(201).json(newTicket);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 
 });
 

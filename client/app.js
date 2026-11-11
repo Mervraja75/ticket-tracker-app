@@ -23,7 +23,7 @@ function createTicketCard (ticket) {
         <p></p>
         <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
         <span class="badge status-${ticket.status}">${ticket.status}</span>
-        <time dateTime="${ticket.createdAt}">${ticket.createdAt}</time>
+        <time dateTime="${ticket.createdAt.slice(0, 10)}"></time>
 
         <select class="status-select" aria-label="Change status">
             <option value="open">Open</option>
