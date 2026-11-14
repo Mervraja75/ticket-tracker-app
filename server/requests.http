@@ -7,6 +7,20 @@ GET http://localhost:3000
 GET http://localhost:3000/api/tickets
 
 ###
+### Get one ticket (200)
+GET http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
+
+###
+### Get one ticket that doesn't exist (404)
+GET http://localhost:3000/api/tickets/99
+
+### Get only open tickets
+GET http://localhost:3000/api/tickets?status=open
+
+### Get only closed tickets
+GET http://localhost:3000/api/tickets?status=closed
+
+###
 ### Create a ticket (201)
 POST http://localhost:3000/api/tickets
 Content-Type: application/json
@@ -17,14 +31,6 @@ Content-Type: application/json
     "priority": "low",
     "category": "hardware"
 }
-
-###
-### Get one ticket (200)
-GET http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
-
-###
-### Get one ticket that doesn't exist (404)
-GET http://localhost:3000/api/tickets/99
 
 ###
 ### Update a ticket's status (200)

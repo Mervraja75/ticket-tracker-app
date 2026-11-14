@@ -3,13 +3,25 @@ const router = express.Router();
 const Ticket = require("../models/Ticket"); // the Ticket assistant (from models/Ticket.js)
 
 
-//GET ALL ROUTE from the DATABASE
+//GET ALL tickets route from the DATABASE
 router.get("/", async function (req, res) {
-    const allTickets = await Ticket.find();
-    res.json(allTickets);
+    try {
+        const filter = {}; // start with no filter = "get everything"
+
+        if(req.query.status) {  // did they ask for a certain status?
+            filter.status = req.query.status; // yes → only that status
+        }
+
+        const allTickets = await Ticket.find(filter) // ask the cabinet, using the filter
+            .sort({ createdAt: -1 }); // newest tickets first
+
+        res.json(allTickets); // send them back
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong" }); // 500 = the server's problem
+    }
 });
 
-// GET ONE ticket from the database
+// GET ONE ticket route from the database
 router.get("/:id", async function(req, res) { // async = this function can wait
     try {   // try = "attempt this..."
         const ticket = await Ticket.findById(req.params.id); // ask the cabinet for the ticket with this _id
