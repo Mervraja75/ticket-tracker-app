@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ###
 ### Get one ticket (200)
-GET http://localhost:3000/api/tickets/1
+GET http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
 
 ###
 ### Get one ticket that doesn't exist (404)
@@ -28,7 +28,7 @@ GET http://localhost:3000/api/tickets/99
 
 ###
 ### Update a ticket's status (200)
-PATCH http://localhost:3000/api/tickets/1
+PATCH http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ### Delete a ticket (200)
-DELETE http://localhost:3000/api/tickets/1793948742284
+DELETE http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
 
 ### Delete a ticket that doesn't exist (404)
 DELETE http://localhost:3000/api/tickets/99
@@ -73,7 +73,7 @@ Content-Type: application/json
 }
 
 ### Update with an invalid status (400)
-PATCH http://localhost:3000/api/tickets/1
+PATCH http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
 Content-Type: application/json
 
 {

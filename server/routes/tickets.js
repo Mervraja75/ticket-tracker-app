@@ -2,39 +2,6 @@ const express = require ("express");
 const router = express.Router();
 const Ticket = require("../models/Ticket"); // the Ticket assistant (from models/Ticket.js)
 
-// Sample Tickets (used first time when the app opens)
-let tickets = [ 
-    { 
-        id: 1, 
-        title: "Printer Not Working", 
-        description: "My printer is not printing my document from my Gmail.", 
-        priority: "high", 
-        status: "open", 
-        createdAt: "2026-10-15"},
-
-    { 
-        id: 2, 
-        title: "Wi-Fi Not Working", 
-        description: "My phone and laptop are not able to connect to the Wi-Fi.", 
-        priority: "medium", 
-        status: "in-progress", 
-        createdAt: "2026-10-15"},
-
-    { 
-        id: 3, 
-        title: "Password not Working", 
-        description: "My password is not working when I tried to log in.", 
-        priority: "low", 
-        status: "closed", 
-        createdAt: "2026-10-14"},
-    {
-        id: 4, 
-        title: "Monitor not turning on",
-        description: "My monitor is not turning on when I plug in.",
-        priority: "medium",
-        status: "open",
-        createdAt: "2026-10-19"},
-];
 
 //GET ALL ROUTE from the DATABASE
 router.get("/", async function (req, res) {
@@ -42,16 +9,19 @@ router.get("/", async function (req, res) {
     res.json(allTickets);
 });
 
-// GET ONE ROUTE
-router.get("/:id", function(req, res) {
-    const id = Number(req.params.id);
-    const ticket = tickets.find(function (t) {
-        return t.id === id;
-    })
-    if (!ticket){
-        return res.status(404).json({ error: "Ticket not found" });
+// GET ONE ticket from the database
+router.get("/:id", async function(req, res) { // async = this function can wait
+    try {   // try = "attempt this..."
+        const ticket = await Ticket.findById(req.params.id); // ask the cabinet for the ticket with this _id
+
+        if (!ticket) { // nothing found?
+            return res.status(404).json({ error: "Ticket not found" }); // 404, and stop
+        }
+
+        res.json(ticket); // found it! send it back
+    } catch (error) { // the id was in a weird format
+        res.status(404).json({ error: "Ticket not found"});
     }
-        res.json(ticket);
     
 });
 
@@ -79,39 +49,47 @@ router.post("/", async function (req, res) {
 
 });
 
-//PATCH (update a ticket)
-router.patch("/:id", function(req, res) {
+//PATCH (update a ticket in the database)
+router.patch("/:id", async function(req, res) { // async = this function can wait
     // Validate PATCH
-    const allowedStatuses = ["open", "in-progress", "closed"];
+    const allowedStatuses = ["open", "in-progress", "closed"]; // the only allowed answers
 
-    if (!allowedStatuses.includes(req.body?.status)) {
-        return res.status(400).json({ error: "Status must be open, in-progress or closed"});
+    if (!allowedStatuses.includes(req.body?.status)) { // not on the list?
+        return res.status(400).json({ error: "Status must be open, in-progress or closed"}); // 400, and stop
     }
 
-    const id = Number(req.params.id);
-    const ticket = tickets.find(function (t) {
-        return t.id === id;
-    });
-    if (!ticket){
-        return res.status(404).json({ error: "Ticket not found" });
+    try { // try = "attempt this..."
+        const ticket = await Ticket.findByIdAndUpdate( // find the ticket AND change it, in one go
+            req.params.id, // 1. which ticket (its _id)
+            { status: req.body.status }, // 2. what to change
+            { new: true, runValidators: true } // 3. extra settings (see below)
+        );
+
+        if (!ticket) { // no ticket with that _id?
+            return res.status(404).json({ error: "Ticket not found" });
+        }
+
+        res.json(ticket); // send back the UPDATED ticket
+    } catch (error) {
+        res.status(404).json({ error: "Ticket not found" })
+
     }
-    ticket.status = req.body.status;
-    res.json(ticket);
 });
 
 //DELETE (remove ticket)
-router.delete("/:id", function(req, res) {
-    const id = Number(req.params.id);
-    const ticket = tickets.find(function (t) {
-        return t.id === id;
-    });
-    if (!ticket){
-        return res.status(404).json({ error: "Ticket not found" });
+router.delete("/:id", async function(req, res) {
+    try {
+        const ticket = await Ticket.findByIdAndDelete(req.params.id);
+
+        if (!ticket){
+            return res.status(404).json({ error: "Ticket not found" });
+        }
+
+        res.json({message: "Ticket deleted" });
+    } catch (error) {
+        res.status(404).json({ error: "Ticket not found" });
     }
-    tickets = tickets.filter(function (t) {
-    return t.id !== id;
-    });
-    res.json({message: "Ticket deleted" });
-})
+
+});
 
 module.exports = router;

@@ -42,13 +42,13 @@ function createTicketCard (ticket) {
     const statusSelect = card.querySelector(".status-select");//find the status to select
     statusSelect.value = ticket.status; //dropdown for "change"
     statusSelect.addEventListener("change", function () {
-        updateStatus(ticket.id, statusSelect.value); //inside listener, a function to update the status of the ticket
+        updateStatus(ticket._id, statusSelect.value); //inside listener, a function to update the status of the ticket
     });
 
     // Delete ticket button
     const deleteBtn = card.querySelector(".delete-btn");//find the delete button in this card
     deleteBtn.addEventListener("click", function () { //click to delete
-        deleteTicket(ticket.id); //inside listener, a function to delete the ticket
+        deleteTicket(ticket._id); //inside listener, a function to delete the ticket
     });
     return card; 
 }
