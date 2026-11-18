@@ -1,10 +1,11 @@
-const express = require ("express");
-const router = express.Router();
-const Ticket = require("../models/Ticket"); // the Ticket assistant (from models/Ticket.js)
+import express, { Request, Response } from "express"; // the server tool, plus the Request and Response labels
+import Ticket from "../models/Ticket";                 // the Ticket assistant (from models/Ticket)
+
+const router = express.Router();                      // the mini app for ticket routes (same as before)
 
 
 //GET ALL tickets route from the DATABASE
-router.get("/", async function (req, res) {
+router.get("/", async function (req: Request, res: Response) {
     try {
         const filter = {}; // start with no filter = "get everything"
 
@@ -22,7 +23,7 @@ router.get("/", async function (req, res) {
 });
 
 // GET ONE ticket route from the database
-router.get("/:id", async function(req, res) { // async = this function can wait
+router.get("/:id", async function (req: Request, res: Response) { // async = this function can wait
     try {   // try = "attempt this..."
         const ticket = await Ticket.findById(req.params.id); // ask the cabinet for the ticket with this _id
 
@@ -38,7 +39,7 @@ router.get("/:id", async function(req, res) { // async = this function can wait
 });
 
 //POST ROUTE
-router.post("/", async function (req, res) {
+router.post("/", async function (req: Request, res: Response) {
     //Validate POST
     const title = req.body.title;
     const description = req.body.description;
@@ -62,7 +63,7 @@ router.post("/", async function (req, res) {
 });
 
 //PATCH (update a ticket in the database)
-router.patch("/:id", async function(req, res) { // async = this function can wait
+router.patch("/:id", async function (req: Request, res: Response) { // async = this function can wait
     // Validate PATCH
     const allowedStatuses = ["open", "in-progress", "closed"]; // the only allowed answers
 
@@ -89,7 +90,7 @@ router.patch("/:id", async function(req, res) { // async = this function can wai
 });
 
 //DELETE (remove ticket)
-router.delete("/:id", async function(req, res) {
+router.delete("/:id", async function (req: Request, res: Response) {
     try {
         const ticket = await Ticket.findByIdAndDelete(req.params.id);
 
@@ -104,4 +105,4 @@ router.delete("/:id", async function(req, res) {
 
 });
 
-module.exports = router;
+export default router; // let other files import this router (the TypeScript way)

@@ -1,8 +1,8 @@
-require("dotenv").config(); // read the .env file and load its secrets
-const express = require("express") // bring in Express
-const ticketRoutes = require("./routes/tickets");
-const cors = require("cors");
-const moongose = require("mongoose"); // the helper that talks to MongoDB
+import "dotenv/config"; // read the .env file and load its secrets
+import express from "express";             // the server tool
+import cors from "cors";                   // the permission note (CORS)
+import mongoose from "mongoose";           // the database assistant
+import ticketRoutes from "./routes/tickets"; // your ticket routes (from routes/tickets)
 const app = express(); // create the app. "app" is the server
 app.use(cors()); //permission note
 app.use(express.json()); //middleware : code that runs on every request before the routes
@@ -15,7 +15,7 @@ app.get("/", function (req, res) {
 //connect to the database and start the server
 async function startServer() { // async = this function can wait
     try { // try = "attempt this..."
-        await moongose.connect(process.env.MONGODB_URI); // connect using the secret address, and wait
+        await mongoose.connect(process.env.MONGODB_URI); // connect using the secret address, and wait
         console.log("MongoDB connected ✅")  // Connection worked!
 
         app.listen(PORT, function() { // now open the doors
