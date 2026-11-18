@@ -8,7 +8,7 @@ GET http://localhost:3000/api/tickets
 
 ###
 ### Get one ticket (200)
-GET http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
+GET http://localhost:3000/api/tickets/6af81da776b5053064f021b3
 
 ###
 ### Get one ticket that doesn't exist (404)
@@ -50,7 +50,7 @@ Content-Type: application/json
 }
 
 ### Delete a ticket (200)
-DELETE http://localhost:3000/api/tickets/6af4131552c2c8238de1ce9d
+DELETE http://localhost:3000/api/tickets/6af81da776b5053064f021b3
 
 ### Delete a ticket that doesn't exist (404)
 DELETE http://localhost:3000/api/tickets/99
