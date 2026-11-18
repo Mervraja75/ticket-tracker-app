@@ -1,30 +1,41 @@
-import "dotenv/config"; // read the .env file and load its secrets
-import express from "express";             // the server tool
-import cors from "cors";                   // the permission note (CORS)
-import mongoose from "mongoose";           // the database assistant
+import "dotenv/config";                      // read the .env file and load its secrets (must be first!)
+import express from "express";               // the server tool
+import cors from "cors";                     // the permission note (CORS)
+import mongoose from "mongoose";             // the database assistant
 import ticketRoutes from "./routes/tickets"; // your ticket routes (from routes/tickets)
-const app = express(); // create the app. "app" is the server
-app.use(cors()); //permission note
-app.use(express.json()); //middleware : code that runs on every request before the routes
-app.use("/api/tickets", ticketRoutes);
-const PORT = process.env.PORT || 3000; // the server "app" will listen to the port 3000
+
+const app = express();                       // create the app. "app" is the server
+const PORT = process.env.PORT || 3000;       // use PORT from .env, or 3000 if it's missing
+
+app.use(cors());                             // permission note: let the web page talk to this server
+app.use(express.json());                     // middleware: open JSON envelopes before the routes get them
+app.use("/api/tickets", ticketRoutes);       // send every /api/tickets request to the ticket routes
+
+// Health check: is the server running?
 app.get("/", function (req, res) {
     res.send("API is running");
-})
+});
 
-//connect to the database and start the server
-async function startServer() { // async = this function can wait
-    try { // try = "attempt this..."
-        await mongoose.connect(process.env.MONGODB_URI); // connect using the secret address, and wait
-        console.log("MongoDB connected ✅")  // Connection worked!
+// Connect to the database, THEN start the server
+async function startServer() {                          // async = this function can wait
+    const uri = process.env.MONGODB_URI;                // ✨ NEW: get the secret database address
 
-        app.listen(PORT, function() { // now open the doors
+    if (!uri) {                                         // ✨ NEW: is it missing?
+        console.log("MONGODB_URI is missing in .env ❌"); //   say so clearly
+        return;                                         //   stop, don't try to connect
+    }
+
+    try {                                               // try = "attempt this..."
+        await mongoose.connect(uri);                    // connect using the address, and wait
+        console.log("MongoDB connected ✅");            // connection worked!
+
+        app.listen(PORT, function () {                  // now open the doors
             console.log(`Server running on http://localhost:${PORT}`);
-        }); 
-    }catch (error) { // catch = "...if anything goes wrong, do this"
+        });
+    } catch (error) {                                   // catch = "...if anything goes wrong, do this"
         console.log("MongoDB connection failed ❌");
-        console.log(error.message); // show what went wrong
+        console.log(error instanceof Error ? error.message : "Unknown error"); // ✨ NEW: only use .message if it's a real Error
     }
 }
 
-startServer();
+startServer(); // run it!

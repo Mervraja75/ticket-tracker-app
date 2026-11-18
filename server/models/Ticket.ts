@@ -1,4 +1,4 @@
-const mongoose = require("mongoose"); // database assistant
+import mongoose from "mongoose"; // the database assistant (TypeScript way)
 
 const ticketSchema = new mongoose.Schema(
     {
@@ -35,4 +35,4 @@ const ticketSchema = new mongoose.Schema(
     { timestamps: true } // created date and last updated automatically added
 );
 
-module.exports = mongoose.model("Ticket", ticketSchema);
+export default mongoose.model("Ticket", ticketSchema); // share the Ticket tool
