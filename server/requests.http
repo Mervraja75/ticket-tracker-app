@@ -55,7 +55,15 @@ DELETE http://localhost:3000/api/tickets/6af81da776b5053064f021b3
 ### Delete a ticket that doesn't exist (404)
 DELETE http://localhost:3000/api/tickets/99
 
+
+
+
 ######################################################################
+######################################################################
+######################################################################
+
+
+
 
 ### Create a ticket with no title (400)
 POST http://localhost:3000/api/tickets
@@ -84,4 +92,84 @@ Content-Type: application/json
 
 {
     "status": "banana"
+}
+
+
+
+######################################################################
+######################################################################
+######################################################################
+
+
+
+### Register a new user (should be 201)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "testpassword123"
+}
+
+### Register the same email again (should be 409)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "testpassword123"
+}
+
+### Register with a short password (should be 400)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Short",
+    "email": "short@example.com",
+    "password": "123"
+}
+
+### Register with missing fields (should be 400)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "missing@example.com"
+}
+
+
+
+######################################################################
+######################################################################
+######################################################################
+
+
+### Login (should be 200 with a token)
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "testpassword123"
+}
+
+### Login with the wrong password (should be 401)
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "wrongpassword"
+}
+
+### Login with an email that doesn't exist (should be 401)
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "nobody@example.com",
+    "password": "testpassword123"
 }
