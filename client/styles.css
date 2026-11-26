@@ -3,6 +3,11 @@
     box-sizing: border-box;
 }
 
+/* Anything with "hidden" is never shown, even if another rule says display: flex */
+[hidden] {
+    display: none !important;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f6f8;
@@ -201,6 +206,28 @@ input:focus, textarea:focus, select:focus {
 3. CHOOSE: Flexbox Axes
 
 */
+
+/* The login box: narrow and centered */
+.login-section {
+    max-width: 400px;   /* don't get wider than this */
+    margin: 40px auto;  /* 40px space on top, and "auto" left/right = centered */
+    padding: 0 15px;    /* a little side space on phones */
+}
+
+/* Red error text under the login form */
+#login-error {
+    color: red;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* The bar in the header with the name + Log out button */
+#user-bar {
+    display: flex;           /* side by side */
+    justify-content: center; /* centered */
+    align-items: center;     /* lined up vertically */
+    gap: 12px;               /* space between name and button */
+}
 
 
 @media (max-width: 768px) {

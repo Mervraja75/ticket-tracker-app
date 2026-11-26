@@ -15,16 +15,40 @@
 
 </head>
 
+
+
 <body>
     <header>
         <h1>Ticket Tracker</h1>
+        <!-- Shows who is logged in, plus a Log out button (hidden until logged in) -->
+        <div id="user-bar" hidden>
+            <span id="user-name"></span>                         <!-- the user's name goes here -->
+            <button id="logout-btn" type="button">Log out</button> <!-- logs out -->
+        </div>
     </header>
 
-    <main>
+    <!-- The login form (shown when nobody is logged in) -->
+    <section id="login-section" class="login-section">
+        <h2>Log In</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" required>       <!-- email box -->
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" required> <!-- shows dots instead of letters -->
+            </div>
+            <p id="login-error"></p>                                            <!-- error messages go here -->
+            <button type="submit">Log In</button>
+        </form>
+    </section>
+
+    <main id="app" hidden>   <!-- the ticket app, hidden until someone logs in -->
         <section class="form-section">
             <!--TICKET FORM-->
             <h2>New Ticket</h2>
-            <form>
+            <form id="ticket-form">   <!-- the New Ticket form, now with its own id -->
 
                 <div class="form-group">
                     <!--TITLE-->

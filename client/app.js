@@ -4,6 +4,11 @@
 
 const API_URL = "http://localhost:3000/api/tickets";
 
+const AUTH_URL = "http://localhost:3000/api/auth";               // the address of the login window
+
+let token = localStorage.getItem("token");                      // the keycard 🪪 (or null if not logged in)
+let currentUser = JSON.parse(localStorage.getItem("user") || "null"); // who is logged in (or null)
+
 // Sample Tickets (used first time when the app opens)
 let tickets = []
 
@@ -23,7 +28,7 @@ function createTicketCard (ticket) {
         <p></p>
         <span class="badge priority-${ticket.priority}">${ticket.priority}</span>
         <span class="badge status-${ticket.status}">${ticket.status}</span>
-        <time dateTime="${ticket.createdAt.slice(0, 10)}"></time>
+        <time dateTime="${ticket.createdAt.slice(0, 10)}">${ticket.createdAt.slice(0, 10)}</time>
 
         <select class="status-select" aria-label="Change status">
             <option value="open">Open</option>
@@ -50,6 +55,13 @@ function createTicketCard (ticket) {
     deleteBtn.addEventListener("click", function () { //click to delete
         deleteTicket(ticket._id); //inside listener, a function to delete the ticket
     });
+
+    // Requesters can't change status or delete, so hide those controls
+    if (currentUser.role !== "tech") {   // not a tech?
+        statusSelect.hidden = true;      // hide the status dropdown
+        deleteBtn.hidden = true;         // hide the Delete button
+    }
+
     return card; 
 }
 
@@ -85,7 +97,7 @@ function renderTickets() { // READ (CRUD)
 async function updateStatus(id, newStatus) { // UPDATE (CRUD) // async = this function can wait
     await fetch(`${API_URL}/${id}`, { // the address of ONE ticket, e.g. .../api/tickets/5
         method: "PATCH", // PATCH = change part of something
-        headers: { "Content-Type": "application/json" }, // tell the server: this is JSON
+        headers: authHeaders(),                       // JSON + keycard 🪪
         body: JSON.stringify({ status: newStatus }), // send only the new status
     });
 
@@ -103,6 +115,7 @@ async function deleteTicket(id) { // DELETE (CRUD)
     //2. TELL THE SERVER TO DELETE IT
     await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
+        headers: authHeaders(),    // ✅ show the keycard 🪪
     });
 
     //3. GET THE FRESH LISH AND SHOW IT
@@ -110,11 +123,51 @@ async function deleteTicket(id) { // DELETE (CRUD)
 
 }
 
-//Function to ask the server
+// Get the tickets from the server (showing the keycard), then draw them
 async function loadTickets() {
-    const response = await fetch(API_URL);  // ask the server for tickets, and wait
-    tickets = await response .json(); // open the answer and turn it into a list
-    renderTickets(); // show the tickets on the screen
+    const response = await fetch(API_URL, { headers: authHeaders() }); // ask, and show the keycard
+
+    if (!response.ok) {          // keycard rejected? (missing, fake, or expired)
+        logout();                // throw it away and show the login form
+        return;                  // stop here
+    }
+
+    tickets = await response.json(); // open the answer and put it in tickets
+    renderTickets();                 // show them on the screen
+}
+
+// Show the ticket app (after logging in)
+function showApp() {
+    document.querySelector("#login-section").hidden = true;  // hide the login form
+    document.querySelector("#app").hidden = false;           // show the ticket app
+    document.querySelector("#user-bar").hidden = false;      // show the name + Log out bar
+    document.querySelector("#user-name").textContent =
+        `${currentUser.name} (${currentUser.role})`;         // like "Test User (tech)"
+}
+
+// Show the login form (when nobody is logged in)
+function showLogin() {
+    document.querySelector("#login-section").hidden = false; // show the login form
+    document.querySelector("#app").hidden = true;            // hide the ticket app
+    document.querySelector("#user-bar").hidden = true;       // hide the name + Log out bar
+}
+
+// Build the headers for every ticket request: "it's JSON" + "here's my keycard"
+function authHeaders() {
+    return {
+        "Content-Type": "application/json",     // the body (if any) is JSON
+        "Authorization": `Bearer ${token}`,     // show the keycard 🪪
+    };
+}
+
+// Log out: throw away the keycard and go back to the login form
+function logout() {
+    token = null;                               // forget the keycard
+    currentUser = null;                         // forget who it was
+    localStorage.removeItem("token");           // take the keycard out of your pocket
+    localStorage.removeItem("user");            // forget the saved user
+    tickets = [];                               // clear the tickets from the screen's list
+    showLogin();                                // show the login form again
 }
 
 // ===============================
@@ -122,7 +175,7 @@ async function loadTickets() {
 // =============================== 
 
 // New Ticket Form
-const form = document.querySelector("form"); //find the form
+const form = document.querySelector("#ticket-form"); // find the NEW TICKET form by its id
 form.addEventListener("submit", async function (event) { // Submit listener (async = this function can wait)
     event.preventDefault(); //stop the reload
 
@@ -154,7 +207,7 @@ form.addEventListener("submit", async function (event) { // Submit listener (asy
     //send the new ticket to the server and wait
     await fetch(API_URL, {
         method: "POST", // POST = create something new
-        headers: { "Content-Type": "application/json" }, // tell the server: this is JSON
+        headers: authHeaders(),                           // ✅ JSON + keycard 🪪
         body: JSON.stringify(newTicket), // pack the ticket into text
     });
 
@@ -178,12 +231,56 @@ statusFilterSelect.addEventListener("change", function () {
     renderTickets();
 });
 
+// Login form: check the email + password with the server
+const loginForm = document.querySelector("#login-form");                 // find the login form
+loginForm.addEventListener("submit", async function (event) {            // async = this function can wait
+    event.preventDefault();                                              // stop the page reload
+
+    const email = document.querySelector("#login-email").value;          // what they typed
+    const password = document.querySelector("#login-password").value;    // what they typed
+    const loginError = document.querySelector("#login-error");           // where errors go
+
+    const response = await fetch(`${AUTH_URL}/login`, {                  // send to the login window
+        method: "POST",                                                  // POST = send something
+        headers: { "Content-Type": "application/json" },                 // just "it's JSON" (no keycard yet)
+        body: JSON.stringify({ email: email, password: password }),      // pack it as text
+    });
+
+    const data = await response.json();                                  // open the server's reply
+
+    if (!response.ok) {                                                  // not a success (like 401)?
+        loginError.textContent = data.error;                             // show the server's message
+        return;                                                          // stop here
+    }
+
+    token = data.token;                                                  // keep the keycard 🪪
+    currentUser = data.user;                                             // remember who logged in
+    localStorage.setItem("token", token);                                // put the keycard in your pocket
+    localStorage.setItem("user", JSON.stringify(currentUser));           // remember the user too
+
+    loginError.textContent = "";                                         // clear old errors
+    loginForm.reset();                                                   // empty the login boxes
+    showApp();                                                           // switch to the ticket app
+    await loadTickets();                                                 // get the tickets
+});
+
+// Log out button: throw away the keycard
+const logoutBtn = document.querySelector("#logout-btn"); // find the Log out button
+logoutBtn.addEventListener("click", function () {         // when it's clicked...
+    logout();                                             // ...forget the keycard and show the login form
+});
 // ===============================
 // 4.          START 
 // =============================== 
 
 
-loadTickets();
+// Already logged in? Show the app. Otherwise, show the login form.
+if (token && currentUser) {   // do we have a keycard AND know who it is?
+    showApp();                // yes → show the ticket app
+    loadTickets();            // and get the tickets
+} else {
+    showLogin();              // no → show the login form
+}
 
 
 

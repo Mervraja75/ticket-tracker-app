@@ -213,10 +213,62 @@ Authorization: Bearer {{login.response.body.token}}
 
 
 ### Update status as a requester (should be 403)
-PATCH http://localhost:3000/api/tickets/PASTE-A-REAL-ID-HERE
+PATCH http://localhost:3000/api/tickets/6b07cefe365a55a3cfbe504f
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
     "status": "closed"
 }
+
+### Delete a ticket as a tech (should be 200)
+DELETE http://localhost:3000/api/tickets/6b07cefe365a55a3cfbe504f
+Authorization: Bearer {{login.response.body.token}}
+
+
+######################################################################
+######################################################################
+######################################################################
+
+### Register a requester (should be 201)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Regular User",
+    "email": "requester@example.com",
+    "password": "requester123"
+}
+
+### Login as the requester
+# @name loginRequester
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "requester@example.com",
+    "password": "requester123"
+}
+
+### Requester creates a ticket (should be 201)
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{loginRequester.response.body.token}}
+
+{
+    "title": "Requester's ticket",
+    "description": "Made by the regular user",
+    "priority": "medium",
+    "category": "software"
+}
+
+### Requester gets tickets (should see ONLY their own)
+GET http://localhost:3000/api/tickets
+Authorization: Bearer {{loginRequester.response.body.token}}
+
+### Tech gets tickets (should see ALL)
+GET http://localhost:3000/api/tickets
+Authorization: Bearer {{login.response.body.token}}
+
+### Get tickets with no keycard (should be 401)
+GET http://localhost:3000/api/tickets
