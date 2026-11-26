@@ -148,6 +148,7 @@ Content-Type: application/json
 
 
 ### Login (should be 200 with a token)
+# @name login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -172,4 +173,35 @@ Content-Type: application/json
 {
     "email": "nobody@example.com",
     "password": "testpassword123"
+}
+
+
+
+######################################################################
+######################################################################
+######################################################################
+
+
+
+### Create a ticket WITHOUT a keycard (should be 401)
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+
+{
+    "title": "No keycard",
+    "description": "This should be blocked",
+    "priority": "low",
+    "category": "hardware"
+}
+
+### Create a ticket WITH a keycard (should be 201)
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "title": "With keycard",
+    "description": "This should work",
+    "priority": "low",
+    "category": "hardware"
 }

@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express"; // the server tool, plus the Request and Response labels
 import Ticket from "../models/Ticket";                 // the Ticket assistant (from models/Ticket)
+import { requireAuth } from "../middleware/auth";       // the guard 💂
 // The only 3 allowed statuses (same as the schema's enum)
 type Status = "open" | "in-progress" | "closed";
 
@@ -40,7 +41,7 @@ router.get("/:id", async function (req: Request, res: Response) {  // async = th
 });
 
 // POST: create a new ticket
-router.post("/", async function (req: Request, res: Response) {    // async = this function can wait
+router.post("/", requireAuth, async function (req: Request, res: Response) {    // async = this function can wait
     const title = req.body?.title;                                 // the title they sent
     const description = req.body?.description;                     // the description they sent
 
