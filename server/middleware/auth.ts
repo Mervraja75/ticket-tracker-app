@@ -30,3 +30,16 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
         res.status(401).json({ error: "Your login is invalid or expired. Please log in again." }); // ❌ fake or expired card
     }
 }
+
+// The staff guard: only lets techs through
+// (must run AFTER requireAuth, because it reads the sticky note requireAuth leaves)
+export function requireTech(req: Request, res: Response, next: NextFunction) {
+    const user = res.locals.user;                  // the sticky note 📝: who is this?
+
+    if (!user || user.role !== "tech") {           // no note, or not a tech?
+        res.status(403).json({ error: "Only techs can do this" }); // 403 = not allowed
+        return;                                    // stop here
+    }
+
+    next();                                        // ✅ they're a tech, so go ahead
+}

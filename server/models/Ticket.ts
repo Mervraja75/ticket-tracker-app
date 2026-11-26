@@ -31,6 +31,11 @@ const ticketSchema = new mongoose.Schema(
             enum: ["open", "in-progress", "closed"], //only 3 answers allowed
             default: "open", // every new ticket starts as "open"
         },
+
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId, // a MongoDB id (the _id of a user)
+            ref: "User",                          // it points to someone in the "users" collection
+        },
     },
     { timestamps: true } // created date and last updated automatically added
 );

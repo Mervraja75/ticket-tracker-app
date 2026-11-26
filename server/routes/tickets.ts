@@ -1,21 +1,27 @@
 import express, { Request, Response } from "express"; // the server tool, plus the Request and Response labels
 import Ticket from "../models/Ticket";                 // the Ticket assistant (from models/Ticket)
-import { requireAuth } from "../middleware/auth";       // the guard 💂
+import { requireAuth, requireTech } from "../middleware/auth"; // both guards 
 // The only 3 allowed statuses (same as the schema's enum)
 type Status = "open" | "in-progress" | "closed";
 
 const router = express.Router();                      // the mini app for ticket routes
 
 // GET ALL tickets (optionally only one status, like ?status=open)
-router.get("/", async function (req: Request, res: Response) {     // async = this function can wait
+router.get("/", requireAuth, async function (req: Request, res: Response) {     // async = this function can wait
     try {                                                          // try = "attempt this..."
         const status = req.query.status;                    // what status did they ask for? (might be nothing)
-        const filter: { status?: Status } = {};             // a box that MAY hold one of the 3 real statuses
+        const filter: { status?: Status; createdBy?: string } = {};             // a box that MAY hold one of the 3 real statuses
 
         if (status === "open" || status === "in-progress" || status === "closed") { // is it a real status?
             filter.status = status;                         // yes → only those tickets
         
         }                                                   // no → the box stays empty = get everything
+
+        const user = res.locals.user;          // who is asking? (from the sticky note)
+        if (user.role !== "tech") {            // not a tech? then they're a requester...
+            filter.createdBy = user.userId;    // ...so only show tickets THEY made
+        }                                      // techs skip this, so they see everything
+
         const allTickets = await Ticket.find(filter)               // ask the cabinet, using the filter
             .sort({ createdAt: -1 });                              // newest tickets first
 
@@ -56,6 +62,7 @@ router.post("/", requireAuth, async function (req: Request, res: Response) {    
             description: description,                              // from the request
             priority: req.body.priority,                           // from the request
             category: req.body.category,                           // from the request
+            createdBy: res.locals.user.userId,                      // who made it (read from the guard's sticky note)
         });
 
         res.status(201).json(newTicket);                           // 201 = created! send back the saved ticket
@@ -65,7 +72,7 @@ router.post("/", requireAuth, async function (req: Request, res: Response) {    
 });
 
 // PATCH: update a ticket's status
-router.patch("/:id", async function (req: Request, res: Response) { // async = this function can wait
+router.patch("/:id", requireAuth, requireTech, async function (req: Request, res: Response) { // keycard check, then tech check
     const allowedStatuses = ["open", "in-progress", "closed"];     // the only allowed answers
 
     if (!allowedStatuses.includes(req.body?.status)) {             // not on the list?
@@ -90,7 +97,7 @@ router.patch("/:id", async function (req: Request, res: Response) { // async = t
 });
 
 // DELETE: remove a ticket
-router.delete("/:id", async function (req: Request, res: Response) { // async = this function can wait
+router.delete("/:id", requireAuth, requireTech, async function (req: Request, res: Response) { // keycard check, then tech check
     try {                                                          // try = "attempt this..."
         const ticket = await Ticket.findByIdAndDelete(req.params.id); // find the ticket AND remove it, in one go
 

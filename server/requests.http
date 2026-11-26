@@ -205,3 +205,18 @@ Authorization: Bearer {{login.response.body.token}}
     "priority": "low",
     "category": "hardware"
 }
+
+
+######################################################################
+######################################################################
+######################################################################
+
+
+### Update status as a requester (should be 403)
+PATCH http://localhost:3000/api/tickets/PASTE-A-REAL-ID-HERE
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "status": "closed"
+}
