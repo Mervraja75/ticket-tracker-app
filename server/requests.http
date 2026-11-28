@@ -272,3 +272,18 @@ Authorization: Bearer {{login.response.body.token}}
 
 ### Get tickets with no keycard (should be 401)
 GET http://localhost:3000/api/tickets
+
+
+######################################################################
+######################################################################
+######################################################################
+
+### Register a DEMO account on the LIVE server (for README visitors)
+POST https://ticket-tracker-app-sxui.onrender.com/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Demo User",
+    "email": "demo@tickettracker.com",
+    "password": "pick-a-new-password"
+}
