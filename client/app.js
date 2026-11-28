@@ -7,7 +7,7 @@ const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname
 
 const BASE_URL = isLocal
     ? "http://localhost:3000"                   // on my computer → use my local server
-    : "https://YOUR-SERVER-URL.onrender.com";   // online → use the real server (we'll fill this in on Day 57)
+    : "https://ticket-tracker-app-sxui.onrender.com";   // online → use the real server (we'll fill this in on Day 57)
 
 const API_URL = `${BASE_URL}/api/tickets`;      // the tickets window
 const AUTH_URL = `${BASE_URL}/api/auth`;        // the login window
