@@ -2,9 +2,15 @@
 // 1.           DATA  
 // ===============================    
 
-const API_URL = "http://localhost:3000/api/tickets";
+// Where is the server? Pick the right address depending on where the app is running.
+const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname); // running on my computer?
 
-const AUTH_URL = "http://localhost:3000/api/auth";               // the address of the login window
+const BASE_URL = isLocal
+    ? "http://localhost:3000"                   // on my computer → use my local server
+    : "https://YOUR-SERVER-URL.onrender.com";   // online → use the real server (we'll fill this in on Day 57)
+
+const API_URL = `${BASE_URL}/api/tickets`;      // the tickets window
+const AUTH_URL = `${BASE_URL}/api/auth`;        // the login window
 
 let token = localStorage.getItem("token");                      // the keycard 🪪 (or null if not logged in)
 let currentUser = JSON.parse(localStorage.getItem("user") || "null"); // who is logged in (or null)
